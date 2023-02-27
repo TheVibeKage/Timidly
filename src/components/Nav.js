@@ -1,12 +1,14 @@
-import min_logo from "../images/logo.png"
+import min_logo from "../images/colored_logo.png"
 import max_logo from "../images/white_logo.png"
 
-const Nav = ({minimal, authToken, setShowModal, showModal, setIsSignUp}) => {
+const Nav = ({minimal, setShowModal, showModal, setIsSignUp}) => {
 
     const handleClick = () => {
         setShowModal(true)
         setIsSignUp(false)
     }
+
+    const authToken = false
 
     return (
         <nav>
