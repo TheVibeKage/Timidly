@@ -1,9 +1,13 @@
-import Nav from "../components/Nav"
-import { useState } from "react"
+import Nav from '../components/Nav'
+import {useState} from 'react'
+import {useCookies} from 'react-cookie'
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 const OnBoarding = () => {
+    const [cookies, setCookie, removeCookie] = useCookies(null)
     const [formData, setFormData] = useState({
-        user_id: "",
+        user_id: cookies.UserId,
         first_name: "",
         dob_day: "",
         dob_month: "",
@@ -17,8 +21,20 @@ const OnBoarding = () => {
 
     })
 
-    const handleSubmit = () => {
-        console.log("submitted")
+    let navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        console.log('submitted')
+        e.preventDefault()
+        try {
+            const response = await axios.put('http://localhost:8000/user', {formData})
+            console.log(response)
+            const success = response.status === 200
+            if (success) navigate('/dashboard')
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     const handleChange = (e) => {
@@ -34,11 +50,13 @@ const OnBoarding = () => {
 
     return (
         <div className="ob-background">
-            <Nav 
+            <Nav
                 minimal={true}
-                setShowModal={() => {}}
+                setShowModal={() => {
+                }}
                 showModal={false}
             />
+
             <div className="onboarding">
                 <h2>CREATE ACCOUNT</h2>
 
@@ -187,15 +205,15 @@ const OnBoarding = () => {
                             required={true}
                         />
                         <div className="photo-container">
-                        {formData.url && <img src={formData.url} alt="profile pic preview"/>}
+                            {formData.url && <img src={formData.url} alt="profile pic preview"/>}
                         </div>
 
-                    </section>
-                </form>
 
+                    </section>
+
+                </form>
             </div>
         </div>
     )
 }
-
 export default OnBoarding
